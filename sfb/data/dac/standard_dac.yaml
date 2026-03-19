@@ -1,0 +1,180 @@
+dac:
+  rows:
+
+    - row: 2
+      entries:
+        - { id: r2c1, type: BRIDGE, once: true }
+        - { id: r2c2, type: FLAG_BRIDGE, once: true }
+        - { id: r2c3, type: BRIDGE, once: true }
+        - { id: r2c4, type: SENSOR }
+        - { id: r2c5, type: DAMAGE_CONTROL, once: true }
+        - { id: r2c6, type: A_HULL }
+        - { id: r2c7, type: WARP_LEFT }
+        - { id: r2c8, type: TRANS }
+        - { id: r2c9, type: TRACTOR }
+        - { id: r2c10, type: SHUTTLE }
+        - { id: r2c11, type: LAB }
+        - { id: r2c12, type: F_HULL }
+        - { id: r2c13, type: WARP_RIGHT }
+        - { id: r2c14, type: EXCESS }
+
+    - row: 3
+      entries:
+        - { id: r3c1, type: DRONE }
+        - { id: r3c2, type: PHASER }
+        - { id: r3c3, type: IMPULSE }
+        - { id: r3c4, type: WARP_LEFT }
+        - { id: r3c5, type: WARP_RIGHT }
+        - { id: r3c6, type: A_HULL }
+        - { id: r3c7, type: SHUTTLE }
+        - { id: r3c8, type: DAMAGE_CONTROL, once: true }
+        - { id: r3c9, type: WARP_CENTER }
+        - { id: r3c10, type: LAB }
+        - { id: r3c11, type: BATTERY }
+        - { id: r3c12, type: PHASER }
+        - { id: r3c13, type: EXCESS }
+
+    - row: 4
+      entries:
+        - { id: r4c1, type: PHASER }
+        - { id: r4c2, type: TRANS }
+        - { id: r4c3, type: WARP_RIGHT }
+        - { id: r4c4, type: IMPULSE }
+        - { id: r4c5, type: F_HULL }
+        - { id: r4c6, type: A_HULL }
+        - { id: r4c7, type: WARP_LEFT }
+        - { id: r4c8, type: APR }
+        - { id: r4c9, type: LAB }
+        - { id: r4c10, type: TRANS }
+        - { id: r4c11, type: PROBE, once: true }
+        - { id: r4c12, type: WARP_CENTER }
+        - { id: r4c13, type: EXCESS }
+
+    - row: 5
+      entries:
+        - { id: r5c1, type: WARP_RIGHT }
+        - { id: r5c2, type: A_HULL }
+        - { id: r5c3, type: CARGO }
+        - { id: r5c4, type: BATTERY }
+        - { id: r5c5, type: SHUTTLE }
+        - { id: r5c6, type: TORPEDO }
+        - { id: r5c7, type: WARP_LEFT }
+        - { id: r5c8, type: IMPULSE }
+        - { id: r5c9, type: WARP_RIGHT }
+        - { id: r5c10, type: TRACTOR }
+        - { id: r5c11, type: PROBE, once: true }
+        - { id: r5c12, type: ANY_WEAPON }
+        - { id: r5c13, type: EXCESS }
+
+    - row: 6
+      entries:
+        - { id: r6c1, type: F_HULL }
+        - { id: r6c2, type: IMPULSE }
+        - { id: r6c3, type: LAB }
+        - { id: r6c4, type: WARP_LEFT }
+        - { id: r6c5, type: SENSOR }
+        - { id: r6c6, type: TRACTOR }
+        - { id: r6c7, type: SHUTTLE }
+        - { id: r6c8, type: WARP_RIGHT }
+        - { id: r6c9, type: PHASER }
+        - { id: r6c10, type: TRANS }
+        - { id: r6c11, type: BATTERY }
+        - { id: r6c12, type: ANY_WEAPON }
+        - { id: r6c13, type: EXCESS }
+
+    - row: 7
+      entries:
+        - { id: r7c1, type: CARGO }
+        - { id: r7c2, type: F_HULL }
+        - { id: r7c3, type: BATTERY }
+        - { id: r7c4, type: WARP_CENTER }
+        - { id: r7c5, type: SHUTTLE }
+        - { id: r7c6, type: APR }
+        - { id: r7c7, type: LAB }
+        - { id: r7c8, type: PHASER }
+        - { id: r7c9, type: ANY_WARP }
+        - { id: r7c10, type: PROBE, once: true }
+        - { id: r7c11, type: A_HULL }
+        - { id: r7c12, type: ANY_WEAPON }
+        - { id: r7c13, type: EXCESS }
+
+    - row: 8
+      entries:
+        - { id: r8c1, type: A_HULL }
+        - { id: r8c2, type: APR }
+        - { id: r8c3, type: SHUTTLE }
+        - { id: r8c4, type: WARP_RIGHT }
+        - { id: r8c5, type: SENSOR }
+        - { id: r8c6, type: TRACTOR }
+        - { id: r8c7, type: LAB }
+        - { id: r8c8, type: WARP_LEFT }
+        - { id: r8c9, type: PHASER }
+        - { id: r8c10, type: TRANS }
+        - { id: r8c11, type: BATTERY }
+        - { id: r8c12, type: ANY_WEAPON }
+        - { id: r8c13, type: EXCESS }
+
+    - row: 9
+      entries:
+        - { id: r9c1, type: WARP_LEFT }
+        - { id: r9c2, type: F_HULL }
+        - { id: r9c3, type: CARGO }
+        - { id: r9c4, type: BATTERY }
+        - { id: r9c5, type: LAB }
+        - { id: r9c6, type: DRONE }
+        - { id: r9c7, type: WARP_RIGHT }
+        - { id: r9c8, type: IMPULSE }
+        - { id: r9c9, type: WARP_LEFT }
+        - { id: r9c10, type: TRACTOR }
+        - { id: r9c11, type: PROBE, once: true }
+        - { id: r9c12, type: ANY_WEAPON }
+        - { id: r9c13, type: EXCESS }
+
+    - row: 10
+      entries:
+        - { id: r10c1, type: PHASER }
+        - { id: r10c2, type: TRACTOR }
+        - { id: r10c3, type: WARP_LEFT }
+        - { id: r10c4, type: IMPULSE }
+        - { id: r10c5, type: A_HULL }
+        - { id: r10c6, type: F_HULL }
+        - { id: r10c7, type: WARP_RIGHT }
+        - { id: r10c8, type: APR }
+        - { id: r10c9, type: LAB }
+        - { id: r10c10, type: TRANS }
+        - { id: r10c11, type: PROBE, once: true }
+        - { id: r10c12, type: WARP_CENTER }
+        - { id: r10c13, type: EXCESS }
+
+    - row: 11
+      entries:
+        - { id: r11c1, type: TORPEDO }
+        - { id: r11c2, type: PHASER }
+        - { id: r11c3, type: IMPULSE }
+        - { id: r11c4, type: WARP_RIGHT }
+        - { id: r11c5, type: WARP_LEFT }
+        - { id: r11c6, type: F_HULL }
+        - { id: r11c7, type: TRACTOR }
+        - { id: r11c8, type: DAMAGE_CONTROL, once: true }
+        - { id: r11c9, type: WARP_CENTER }
+        - { id: r11c10, type: LAB }
+        - { id: r11c11, type: BATTERY }
+        - { id: r11c12, type: PHASER }
+        - { id: r11c13, type: EXCESS }
+
+    - row: 12
+      entries:
+        - { id: r12c1, type: AUX_CONTROL, once: true }
+        - { id: r12c2, type: EMERGENCY_BRIDGE, once: true }
+        - { id: r12c3, type: BRIDGE, once: true }
+        - { id: r12c4, type: SENSOR }
+        - { id: r12c5, type: PROBE, once: true }
+        - { id: r12c6, type: F_HULL }
+        - { id: r12c7, type: WARP_RIGHT }
+        - { id: r12c8, type: TRANS }
+        - { id: r12c9, type: SHUTTLE }
+        - { id: r12c10, type: TRACTOR }
+        - { id: r12c11, type: LAB }
+        - { id: r12c12, type: A_HULL }
+        - { id: r12c13, type: WARP_LEFT }
+        - { id: r12c14, type: EXCESS }
