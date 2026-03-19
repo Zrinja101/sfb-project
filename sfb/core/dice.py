@@ -2,6 +2,15 @@
 Dice module for SFB simulator.
 
 Provides deterministic or random dice rolling.
+
+Examples::
+    >>> # Random rolls
+    >>> dice = Dice()
+    >>> print(dice.roll_2d6())  # Random result between 2-12
+
+    >>> # Deterministic seeded rolls (for testing)
+    >>> fixed_dice = Dice(seed=42)
+    >>> print(fixed_dice.roll_2d6())  # Will always produce same sequence
 """
 
 import random

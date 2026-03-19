@@ -1,25 +1,25 @@
-from sfb.core.dice import Dice
-from sfb.core.ship import Ship
-from sfb.dac.dac import DAC
-from sfb.io.yaml_loader import load_dac_table
+from sfb.core.map import HexMap
+from sfb.core.engine import Engine
+from sfb.units.ship import Ship
+from sfb.units.drone import Drone
 
 
 def main():
-    dice = Dice()
+    game_map = HexMap()
 
-    table = load_dac_table("sfb/data/dac/standard_dac.yaml")
+    ship = Ship("Cadet Ship", (0, 0), "A")
 
-    ship = Ship({
-        "CARGO": 2,
-        "F_HULL": 1,
-        "BATTERY": 1
-    })
+    drone1 = Drone("Drone 1", (3, 0))
+    drone2 = Drone("Drone 2", (5, -1))
 
-    dac = DAC(table, dice)
-    dac.new_volley()
+    game_map.add_entity(ship)
+    game_map.add_entity(drone1)
+    game_map.add_entity(drone2)
 
-    for _ in range(5):
-        print(dac.resolve_hit(ship))
+    engine = Engine(game_map, ship, [drone1, drone2])
+
+    for _ in range(20):
+        engine.step()
 
 
 if __name__ == "__main__":
