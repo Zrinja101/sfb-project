@@ -21,11 +21,12 @@ This file maps the STARS FLEET BATTLES Cadet Training Handbook Scenario #1 requi
 
 ## 4. Implementation tasks
 1. `game/state.py`: helper state machine
-2. `game/scenario1.py`: initial positioning
-3. `core/ship.py`: turn mode + turn-point state
-4. `combat/arc.py`: firing arc helpers
-5. `engine.py`: integrate play sequence
-6. `tests/test_scenario1.py`: scenario success logic
+2. `data/scenarios/scenario_1.yaml`: initial scenario data (positions, facing, turn mode)
+3. `sfb/scenarios/loader.py`: generic data-driven scenario loader
+4. `core/ship.py`: turn mode + turn-point state
+5. `combat/arc.py`: firing arc helpers
+6. `engine.py`: integrate play sequence
+7. `tests/test_scenario1.py`: scenario success logic
 
 ## 5. Test driven design
 - `test_step_sequence` → enforce ordering

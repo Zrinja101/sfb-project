@@ -4,9 +4,9 @@ player_ship:
   hex: [0, 0]
   facing: "A"
   turn_mode: 1
-enemy_ship:
-  name: "Enemy Ship"
-  hex: [3, 0]
-  facing: "D"
-  turn_mode: 2
+enemy_ships:
+  - name: "Enemy Ship"
+    hex: [3, 0]
+    facing: "D"
+    turn_mode: 2
 weapon: "sfb/data/weapons/phaser_1.yaml"
