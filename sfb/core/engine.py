@@ -1,4 +1,9 @@
+"""
+Game engine orchestration for turn/impulse processing.
+"""
+
 from sfb.combat.combat import CombatSystem
+
 
 class Engine:
     def __init__(self, game_map, player_ship, targets):

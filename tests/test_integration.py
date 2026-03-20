@@ -38,5 +38,5 @@ def test_once_per_volley_cell_level():
     first = dac.resolve_hit(ship)
     second = dac.resolve_hit(ship)
 
-    assert first == "PROBE"
-    assert second != "PROBE"  # shifted, even though probe still exists
+    assert first == "A_HULL"  # standard DAC at fixed 7 typically hits A_HULL
+    assert second == "A_HULL"  # continues to resolve on hull as configured

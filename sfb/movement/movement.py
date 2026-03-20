@@ -1,3 +1,7 @@
+"""
+Movement utilities (turning and forward motion) for hex ships.
+"""
+
 FACINGS = ["A", "B", "C", "D", "E", "F"]
 
 

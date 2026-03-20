@@ -1,3 +1,7 @@
+"""
+General YAML loader helper for game data files.
+"""
+
 import yaml
 from pathlib import Path
 

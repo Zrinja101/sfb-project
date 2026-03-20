@@ -1,3 +1,7 @@
+"""
+Phaser weapon behavior and damage lookup from YAML data.
+"""
+
 import random
 from sfb.utils.loader import load_yaml
 

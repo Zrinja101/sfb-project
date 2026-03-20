@@ -1,3 +1,7 @@
+"""
+Player/AI-controlled ship entity with movement controls.
+"""
+
 from sfb.core.entity import Entity
 from sfb.movement.movement import turn_left, turn_right, move_forward
 

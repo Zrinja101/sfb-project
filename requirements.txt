@@ -1,8 +1,10 @@
 asttokens==3.0.1
 decorator==5.2.1
 executing==2.2.1
+gitdb==4.0.12
+GitPython==3.1.41
 iniconfig==2.3.0
-ipython==9.11.0
+ipython==9.10.0
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
 matplotlib-inline==0.2.1
@@ -15,6 +17,8 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 Pygments==2.19.2
 pytest==9.0.2
+smmap==5.0.3
 stack-data==0.6.3
 traitlets==5.14.3
+typing_extensions==4.15.0
 wcwidth==0.6.0

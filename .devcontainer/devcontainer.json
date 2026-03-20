@@ -22,5 +22,7 @@
 
   "postCreateCommand": "bash .devcontainer/setup.sh",
 
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "postStartCommand": "sudo chown -R vscode:vscode /workspace"
 }

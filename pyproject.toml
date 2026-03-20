@@ -1,3 +1,32 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "sfb"
+version = "0.1.0"
+description = "Star Fleet Battles simulator"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "pyyaml",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "black",
+    "isort",
+    "mypy",
+]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "Q"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

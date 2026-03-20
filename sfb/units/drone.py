@@ -1,3 +1,7 @@
+"""
+Drone unit (weak/flying/moving target) for combat simulation.
+"""
+
 from sfb.core.entity import Entity
 
 
