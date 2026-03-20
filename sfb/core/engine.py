@@ -3,6 +3,7 @@ Game engine orchestration for turn/impulse processing.
 """
 
 from sfb.combat.combat import CombatSystem
+from sfb.game.state import GameState, GameStep
 
 
 class Engine:
@@ -10,30 +11,40 @@ class Engine:
         self.map = game_map
         self.ship = player_ship
         self.targets = targets
+        self.state = GameState()
 
-        self.turn = 1
-        self.impulse = 1
+    @property
+    def turn(self):
+        return self.state.turn
+
+    @property
+    def impulse(self):
+        return self.state.impulse
 
     def step(self):
-        print(f"\nTurn {self.turn}, Impulse {self.impulse}")
+        # Execute a complete impulse (all defined steps) in one call
+        for _ in range(len(self.state.STEPS)):
+            print(f"\nTurn {self.state.turn}, Impulse {self.state.impulse} ({self.state.step.name})")
 
-        # Movement
-        self.ship.move(self.map)
-        print(f"{self.ship.name} moves to {self.ship.hex} facing {self.ship.facing}")
+            if self.state.step == GameStep.MOVE_SHIPS:
+                self.ship.move(self.map)
+                print(f"{self.ship.name} moves to {self.ship.hex} facing {self.ship.facing}")
 
-        # Combat (auto-fire for now)
-        target = CombatSystem.find_closest_target(self.ship, self.targets)
+            elif self.state.step == GameStep.MOVE_SEEKING_WEAPONS:
+                print("Seek weapons phase (no action)")
 
-        if target:
-            print(f"Firing at {target.name}...")
-            CombatSystem.fire_phaser(self.ship, target, self.map)
-        else:
-            print("No targets remaining")
+            elif self.state.step == GameStep.FIRE_WEAPONS:
+                target = CombatSystem.find_closest_target(self.ship, self.targets)
+                if target:
+                    print(f"Firing at {target.name}...")
+                    CombatSystem.fire_phaser(self.ship, target, self.map)
+                else:
+                    print("No targets remaining")
 
-        self._next_impulse()
+            elif self.state.step == GameStep.DAMAGE:
+                print("Damage resolution phase")
+
+            self.state.next_step()
 
     def _next_impulse(self):
-        self.impulse += 1
-        if self.impulse > 8:
-            self.impulse = 1
-            self.turn += 1
+        self.state.next_impulse()
