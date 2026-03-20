@@ -21,3 +21,10 @@ def load_dac_table(path: str) -> List[List[Dict]]:
 
     rows = sorted(data["dac"]["rows"], key=lambda r: r["row"])
     return [row["entries"] for row in rows]
+
+
+def load_scenario(path: str):
+    """Load a scenario configuration from YAML."""
+    with open(path, "r") as f:
+        return yaml.safe_load(f)
+
