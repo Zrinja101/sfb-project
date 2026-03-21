@@ -33,4 +33,6 @@ def load_scenario(path: str) -> Scenario:
         player_ship=player_ship,
         enemy_ships=enemy_ships,
         weapon=data.get("weapon", "sfb/data/weapons/phaser_1.yaml"),
+        victory_conditions=data.get("victory_conditions"),
+        description=data.get("description", ""),
     )

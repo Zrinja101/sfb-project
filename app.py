@@ -9,8 +9,67 @@ import argparse
 from sfb.core.map import HexMap
 from sfb.core.engine import Engine
 from sfb.combat.combat import CombatSystem
+from sfb.scenarios import load_scenario
+from sfb.scenarios.victory import VictoryChecker
 from sfb.units.ship import Ship
 from sfb.units.drone import Drone
+
+
+def run_scenario(scenario_path: str, max_turns: int = 20):
+    """
+    Run a scenario with victory conditions.
+    """
+    print(f"Loading scenario: {scenario_path}")
+    scenario = load_scenario(scenario_path)
+
+    print(f"🎯 {scenario.name}")
+    if scenario.description:
+        print(f"📖 {scenario.description}")
+    print(f"🚀 Player: {scenario.player_ship.name} at {scenario.player_ship.hex}")
+    print(f"🎯 Enemies: {', '.join(f'{s.name} at {s.hex}' for s in scenario.enemy_ships)}")
+
+    if scenario.victory_conditions:
+        vc = scenario.victory_conditions
+        print(f"🏆 Victory: {vc.get('description', vc.get('type', 'Unknown'))}")
+
+    print("=" * 50)
+
+    # Setup game
+    game_map = HexMap()
+    game_map.add_entity(scenario.player_ship)
+    for enemy in scenario.enemy_ships:
+        game_map.add_entity(enemy)
+
+    engine = Engine(game_map, scenario.player_ship, scenario.enemy_ships)
+
+    # Run game loop
+    for turn in range(max_turns):
+        print(f"\n--- Turn {engine.turn} ---")
+
+        # Run 8 impulses per turn
+        for impulse in range(8):
+            print(f"Impulse {engine.impulse}: ", end="")
+            engine.step()
+
+            # Check victory conditions after each impulse
+            result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+            if result["victory"] or result["defeat"]:
+                print(f"\n{result['message']}")
+                return result["victory"]
+
+        # Check victory at end of turn
+        result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+        if result["victory"] or result["defeat"]:
+            print(f"\n{result['message']}")
+            return result["victory"]
+
+    # Timeout
+    result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+    if result["defeat"]:
+        print(f"\n{result['message']}")
+    else:
+        print(f"\n⏰ Scenario timed out after {max_turns} turns")
+    return False
 
 
 def run_static_scenario(max_turns=20):
@@ -356,17 +415,17 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Available Modes:
-  static          - Automated execution (current default behavior)
+  static          - Automated execution with victory conditions
   user-input      - Interactive user input for tactical decisions
   ai              - AI-controlled ship tactics
   multiplayer     - Multiple human players
   gui-simulation  - Simulate GUI integration (demonstrates event-driven gameplay)
 
 Examples:
-  python app.py                        # Run static scenario
-  python app.py -m static -t 10        # Run static for 10 turns
-  python app.py -m user-input          # Interactive mode
-  python app.py -m gui-simulation      # GUI integration demo
+  python app.py                                    # Run scenario 1 with victory conditions
+  python app.py -s sfb/data/scenarios/scenario_1.yaml  # Run specific scenario
+  python app.py -m user-input                       # Interactive mode
+  python app.py -m gui-simulation                   # GUI integration demo
         """
     )
 
@@ -387,15 +446,15 @@ Examples:
 
     parser.add_argument(
         "-s", "--scenario",
-        default="scenario1",
-        help="Scenario to run (default: scenario1, future: more options)"
+        default="sfb/data/scenarios/scenario_1.yaml",
+        help="Scenario file to run (default: sfb/data/scenarios/scenario_1.yaml)"
     )
 
     args = parser.parse_args()
 
     # Dispatch to appropriate mode
     if args.mode == "static":
-        run_static_scenario(args.turns)
+        run_scenario(args.scenario, args.turns)
     elif args.mode == "user-input":
         run_user_input_scenario()
     elif args.mode == "ai":

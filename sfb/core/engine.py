@@ -33,6 +33,11 @@ class Engine:
         return self.state.impulse
 
     @property
+    def total_impulses(self):
+        """Total impulses elapsed (turns * 8 + current impulse)."""
+        return (self.state.turn - 1) * 8 + self.state.impulse
+
+    @property
     def current_phase(self):
         return self.state.step
 
