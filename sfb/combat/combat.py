@@ -4,6 +4,7 @@ Combat operations including target selection and weapon firing.
 
 from sfb.core.map import HexMap
 from sfb.combat.phaser import Phaser
+from sfb.combat.arc import can_fire_at
 
 
 class CombatSystem:
@@ -34,9 +35,15 @@ class CombatSystem:
         if not target.alive:
             return
 
+        phaser_instance = phaser or Phaser("sfb/data/weapons/phaser_1.yaml")
+
+        # Check firing arc
+        if not can_fire_at(ship.hex, ship.facing, target.hex, phaser_instance.arcs):
+            print(f"Cannot fire: target not in firing arc")
+            return
+
         range_to_target = game_map.distance(ship.hex, target.hex)
 
-        phaser_instance = phaser or Phaser("sfb/data/weapons/phaser_1.yaml")
         damage = phaser_instance.fire(range_to_target)
 
         target.take_damage(damage)

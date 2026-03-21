@@ -11,6 +11,7 @@ class Phaser:
         data = load_yaml(yaml_path)
 
         self.name = data["name"]
+        self.arcs = data.get("arcs", ["forward"])  # Default to forward if not specified
         self.damage_table = data["damage_table"]
 
     def fire(self, range_to_target: int) -> int:

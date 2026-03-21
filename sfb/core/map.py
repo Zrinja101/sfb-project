@@ -1,3 +1,6 @@
+import math
+
+
 class HexMap:
     """
     Axial hex grid (q, r)
@@ -12,6 +15,33 @@ class HexMap:
         "E": (-1, 1),
         "F": (0, 1),
     }
+
+    @staticmethod
+    def facing_to_angle(facing: str) -> int:
+        """Convert facing direction to angle in degrees."""
+        angles = {"A": 0, "B": 60, "C": 120, "D": 180, "E": 240, "F": 300}
+        return angles[facing]
+
+    @staticmethod
+    def bearing_direction(a: tuple[int, int], b: tuple[int, int]) -> str:
+        """
+        Get the primary hex direction from a to b.
+        Returns the direction letter A-F.
+        """
+        dq = b[0] - a[0]
+        dr = b[1] - a[1]
+
+        if dq > 0:
+            return "B" if dr < 0 else "A"
+        elif dq < 0:
+            return "E" if dr > 0 else "D"
+        else:  # dq == 0
+            if dr < 0:
+                return "C"
+            elif dr > 0:
+                return "F"
+            else:
+                return "A"  # same position
 
     def __init__(self):
         self.entities = []

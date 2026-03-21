@@ -7,8 +7,8 @@ from sfb.movement.movement import turn_left, turn_right, move_forward
 
 
 class Ship(Entity):
-    def __init__(self, name, hex, facing, turn_mode=1):
-        super().__init__(name=name, hex=hex, facing=facing)
+    def __init__(self, name, hex, facing, turn_mode=1, hp=10):
+        super().__init__(name=name, hex=hex, facing=facing, hp=hp)
         self.turn_mode = turn_mode
         self.hexes_moved_since_turn = 0
 

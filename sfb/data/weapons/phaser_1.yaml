@@ -1,5 +1,5 @@
 name: phaser-1
-
+arcs: ["forward"]
 damage_table:
   1: [9, 8, 7, 6, 5, 4]
   2: [8, 7, 6, 5, 4, 3]
