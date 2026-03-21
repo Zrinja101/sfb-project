@@ -26,7 +26,7 @@ This file maps the STARS FLEET BATTLES Cadet Training Handbook Scenario #1 requi
 2. ✅ `data/scenarios/scenario_1.yaml`: initial scenario data (positions, facing, turn mode)
 3. ✅ `sfb/scenarios/loader.py`: generic data-driven scenario loader
 4. ✅ `core/ship.py`: turn mode + turn-point state
-5. `combat/arc.py`: firing arc helpers
+5. ✅ `combat/arc.py`: firing arc helpers
 6. ✅ `engine.py`: integrate play sequence
 7. ✅ `tests/test_scenario1.py`: scenario success logic
 
@@ -35,14 +35,13 @@ This file maps the STARS FLEET BATTLES Cadet Training Handbook Scenario #1 requi
 - ✅ `test_step_sequence` → enforce ordering (test_game_state.py)
 - ✅ `test_turn_mode` → must move N hex before turn
 - `test_range_formula` → match D1.4
-- `test_fire_phaser_life` → hit in/out arc
+- ✅ `test_fire_phaser_life` → hit in/out arc (test_arc.py, test_phaser.py)
 - `test_scenario1_victory` → target destroyed in N impulses
 
 ## 6. Next steps
-1. Implement firing arcs (`combat/arc.py`) - D2.0 firing arcs
-2. Add range calculation validation - D1.4 true range formula
-3. Implement scenario victory conditions - target destroyed in N impulses
-4. Add phaser firing tests - hit in/out of arc validation
+1. Add range calculation validation - D1.4 true range formula
+2. Implement scenario victory conditions - target destroyed in N impulses
+3. Add phaser firing tests - hit in/out of arc validation (if needed)
 
 ## 7. Data fixtures
 - `data/scenarios/scenario1.yaml`:
