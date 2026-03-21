@@ -33,3 +33,9 @@ class Ship(Entity):
             raise ValueError("Cannot turn yet: turn mode requirement not met")
         self.facing = turn_right(self.facing)
         self.reset_turn_counter()
+
+    def take_damage(self, amount: int):
+        """Take damage and update alive status."""
+        self.hp -= amount
+        if self.hp <= 0:
+            self.alive = False

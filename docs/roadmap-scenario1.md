@@ -41,7 +41,7 @@ This file maps the STARS FLEET BATTLES Cadet Training Handbook Scenario #1 requi
 ## 6. Next steps
 1. ✅ Add range calculation validation - D1.4 true range formula
 2. ✅ Implement scenario victory conditions - target destroyed in N impulses
-3. Add phaser firing tests - hit in/out of arc validation (if needed)
+3. ✅ Add phaser firing tests - hit in/out of arc validation (if needed)
 
 ## 7. Data fixtures
 - `data/scenarios/scenario1.yaml`:
