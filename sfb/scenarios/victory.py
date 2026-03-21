@@ -38,7 +38,8 @@ class VictoryChecker:
 
         # Check victory conditions
         if condition_type == "destroy_all_enemies":
-            alive_enemies = [target for target in engine.targets if target.alive]
+            alive_enemies = [
+                target for target in engine.targets if target.alive]
             if not alive_enemies:
                 total_impulses = (engine.turn - 1) * 8 + engine.impulse
                 if max_impulses and total_impulses > max_impulses:
@@ -58,7 +59,8 @@ class VictoryChecker:
         if max_impulses:
             total_impulses = (engine.turn - 1) * 8 + engine.impulse
             if total_impulses >= max_impulses:
-                alive_enemies = [target for target in engine.targets if target.alive]
+                alive_enemies = [
+                    target for target in engine.targets if target.alive]
                 if alive_enemies:  # Only defeat if enemies are still alive
                     return {
                         "victory": False,

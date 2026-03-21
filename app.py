@@ -25,8 +25,10 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
     print(f"🎯 {scenario.name}")
     if scenario.description:
         print(f"📖 {scenario.description}")
-    print(f"🚀 Player: {scenario.player_ship.name} at {scenario.player_ship.hex}")
-    print(f"🎯 Enemies: {', '.join(f'{s.name} at {s.hex}' for s in scenario.enemy_ships)}")
+    print(
+        f"🚀 Player: {scenario.player_ship.name} at {scenario.player_ship.hex}")
+    print(
+        f"🎯 Enemies: {', '.join(f'{s.name} at {s.hex}' for s in scenario.enemy_ships)}")
 
     if scenario.victory_conditions:
         vc = scenario.victory_conditions
@@ -52,13 +54,15 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
             engine.step()
 
             # Check victory conditions after each impulse
-            result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+            result = VictoryChecker.check_victory(
+                engine, scenario.victory_conditions)
             if result["victory"] or result["defeat"]:
                 print(f"\n{result['message']}")
                 return result["victory"]
 
         # Check victory at end of turn
-        result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+        result = VictoryChecker.check_victory(
+            engine, scenario.victory_conditions)
         if result["victory"] or result["defeat"]:
             print(f"\n{result['message']}")
             return result["victory"]

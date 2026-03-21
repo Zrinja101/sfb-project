@@ -13,5 +13,5 @@ enemy_ships:
 weapon: "sfb/data/weapons/phaser_1.yaml"
 victory_conditions:
   type: "destroy_all_enemies"
-  max_impulses: 16  # 2 turns worth of impulses
+  max_impulses: 16 # 2 turns worth of impulses
   description: "Destroy all enemy ships within 16 impulses"
