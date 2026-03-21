@@ -20,6 +20,10 @@
     }
   },
 
+  "remoteEnv": {
+    "TZ": "America/New_York"
+  },
+
   "postCreateCommand": "bash .devcontainer/setup.sh",
 
   "remoteUser": "vscode",
