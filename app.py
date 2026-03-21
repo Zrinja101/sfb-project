@@ -11,6 +11,8 @@ from sfb.core.engine import Engine
 from sfb.combat.combat import CombatSystem
 from sfb.scenarios import load_scenario
 from sfb.scenarios.victory import VictoryChecker
+from sfb.game.logger import GameLogger
+from sfb.game.visualizer import MapVisualizer
 from sfb.units.ship import Ship
 from sfb.units.drone import Drone
 
@@ -43,8 +45,12 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
         game_map.add_entity(enemy)
 
     engine = Engine(game_map, scenario.player_ship, scenario.enemy_ships)
+    
+    # Initialize logger to capture events and snapshots
+    logger = GameLogger(engine)
 
     # Run game loop
+    victory = False
     for turn in range(max_turns):
         print(f"\n--- Turn {engine.turn} ---")
 
@@ -52,28 +58,43 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
         for impulse in range(8):
             print(f"Impulse {engine.impulse}: ", end="")
             engine.step()
+            logger.end_impulse()
 
             # Check victory conditions after each impulse
             result = VictoryChecker.check_victory(
                 engine, scenario.victory_conditions)
             if result["victory"] or result["defeat"]:
                 print(f"\n{result['message']}")
-                return result["victory"]
+                victory = result["victory"]
+                break
+            
+            # Start log for next impulse
+            logger.start_impulse()
+
+        if result["victory"] or result["defeat"]:
+            break
 
         # Check victory at end of turn
         result = VictoryChecker.check_victory(
             engine, scenario.victory_conditions)
         if result["victory"] or result["defeat"]:
             print(f"\n{result['message']}")
-            return result["victory"]
+            victory = result["victory"]
+            break
+
+    # Output game logs and snapshots
+    print(logger.format_full_log())
+    print(MapVisualizer.format_all_snapshots(logger.snapshots))
 
     # Timeout
-    result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
-    if result["defeat"]:
-        print(f"\n{result['message']}")
-    else:
-        print(f"\n⏰ Scenario timed out after {max_turns} turns")
-    return False
+    if not victory:
+        result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
+        if result["defeat"]:
+            print(f"\n{result['message']}")
+        else:
+            print(f"\n⏰ Scenario timed out after {max_turns} turns")
+    
+    return victory
 
 
 def run_static_scenario(max_turns=20):

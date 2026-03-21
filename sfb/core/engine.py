@@ -232,9 +232,19 @@ class Engine:
                 f"\nTurn {self.state.turn}, Impulse {self.state.impulse} ({self.state.step.name})")
 
             if self.state.step == GameStep.MOVE_SHIPS:
+                old_pos = self.ship.hex
+                old_facing = self.ship.facing
                 self.ship.move(self.map)
                 print(
                     f"{self.ship.name} moves to {self.ship.hex} facing {self.ship.facing}")
+                
+                # Broadcast movement event
+                self.notify_listeners('ship_moved', {
+                    'actor': self.ship.name,
+                    'from': old_pos,
+                    'to': self.ship.hex,
+                    'facing': self.ship.facing
+                })
 
             elif self.state.step == GameStep.MOVE_SEEKING_WEAPONS:
                 print("Seek weapons phase (no action)")
@@ -244,7 +254,17 @@ class Engine:
                     self.ship, self.targets)
                 if target:
                     print(f"Firing at {target.name}...")
+                    old_hp = target.hp
                     CombatSystem.fire_phaser(self.ship, target, self.map)
+                    
+                    # Broadcast combat result event
+                    self.notify_listeners('combat_result', {
+                        'actor': self.ship.name,
+                        'target': target.name,
+                        'damage_dealt': old_hp - target.hp,
+                        'target_destroyed': not target.alive,
+                        'target_hp': target.hp
+                    })
                 else:
                     print("No targets remaining")
 

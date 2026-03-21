@@ -120,7 +120,8 @@ def test_all_arcs_comprehensive():
         ((0, -1), ["forward-port", "aft-port"]),  # C direction
         ((-1, 0), ["aft-port", "aft"]),  # D direction
         ((-1, 1), ["aft", "aft-starboard"]),  # E direction
-        ((0, 1), ["forward", "aft-starboard", "forward-starboard"]),  # F direction
+        ((0, 1), ["forward", "aft-starboard",
+         "forward-starboard"]),  # F direction
     ]
 
     for target_hex, expected_arcs in test_cases:
