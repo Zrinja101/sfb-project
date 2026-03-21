@@ -22,3 +22,12 @@ repos:
     rev: 6.9.0
     hooks:
       - id: pydocstyle
+
+  - repo: local
+    hooks:
+      - id: check-init-files
+        name: Check for missing __init__.py files
+        entry: python scripts/check_init_files.py
+        language: system
+        files: \.py$
+        pass_filenames: false
