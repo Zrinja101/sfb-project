@@ -28,4 +28,29 @@ def test_fire_phaser_affects_target(monkeypatch):
 
     CombatSystem.fire_phaser(ship, target, m)
     assert target.hp == 0
+
+
+def test_fire_phaser_uses_correct_range(monkeypatch):
+    ship = Drone("Player", (0, 0))
+    target = Drone("Target", (2, 0))  # range 2
+    m = HexMap()
+
+    fired_ranges = []
+    original_fire = None
+
+    def mock_fire(self, r):
+        fired_ranges.append(r)
+        return 5
+
+    # Patch Phaser.fire to capture the range
+    from sfb.combat.phaser import Phaser
+    original_fire = Phaser.fire
+    Phaser.fire = mock_fire
+
+    try:
+        CombatSystem.fire_phaser(ship, target, m)
+        assert len(fired_ranges) == 1
+        assert fired_ranges[0] == 2  # Should be range 2
+    finally:
+        Phaser.fire = original_fire
     assert not target.alive

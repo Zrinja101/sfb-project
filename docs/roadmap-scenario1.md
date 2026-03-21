@@ -34,12 +34,12 @@ This file maps the STARS FLEET BATTLES Cadet Training Handbook Scenario #1 requi
 - `pytest` as the primary testing framework
 - ✅ `test_step_sequence` → enforce ordering (test_game_state.py)
 - ✅ `test_turn_mode` → must move N hex before turn
-- `test_range_formula` → match D1.4
+- ✅ `test_range_formula` → match D1.4 (test_map.py, test_combat_system.py)
 - ✅ `test_fire_phaser_life` → hit in/out arc (test_arc.py, test_phaser.py)
 - `test_scenario1_victory` → target destroyed in N impulses
 
 ## 6. Next steps
-1. Add range calculation validation - D1.4 true range formula
+1. ✅ Add range calculation validation - D1.4 true range formula
 2. Implement scenario victory conditions - target destroyed in N impulses
 3. Add phaser firing tests - hit in/out of arc validation (if needed)
 
