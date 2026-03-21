@@ -25,3 +25,6 @@ dist/
 # System
 .DS_Store
 Thumbs.db
+
+# Handbook PDF should not be tracked
+docs/SFBCadetTrainingHandbook.pdf
