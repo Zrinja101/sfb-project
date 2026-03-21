@@ -14,7 +14,8 @@ def find_python_packages_without_init(root_dir: str) -> list[str]:
 
     for root, dirs, files in os.walk(root_dir):
         # Skip certain directories
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', '.venv', '.pytest_cache']]
+        dirs[:] = [d for d in dirs if not d.startswith(
+            '.') and d not in ['__pycache__', '.venv', '.pytest_cache']]
 
         # Check if this directory contains Python files
         has_py_files = any(f.endswith('.py') for f in files)

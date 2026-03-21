@@ -13,7 +13,8 @@ def add_missing_init_files(root_dir: str) -> int:
 
     for root, dirs, files in os.walk(root_dir):
         # Skip certain directories
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', '.venv', '.pytest_cache', 'node_modules']]
+        dirs[:] = [d for d in dirs if not d.startswith(
+            '.') and d not in ['__pycache__', '.venv', '.pytest_cache', 'node_modules']]
 
         # Check if this directory contains Python files
         has_py_files = any(f.endswith('.py') for f in files)

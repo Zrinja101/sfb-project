@@ -8,6 +8,7 @@ Command-line interface for running SFB scenarios with different execution modes.
 import argparse
 from sfb.core.map import HexMap
 from sfb.core.engine import Engine
+from sfb.combat.combat import CombatSystem
 from sfb.units.ship import Ship
 from sfb.units.drone import Drone
 
@@ -67,7 +68,8 @@ def run_user_input_scenario():
 
     print(f"🚀 Starting Scenario #1")
     print(f"📍 Your ship: {ship.name} at {ship.hex}, facing {ship.facing}")
-    print(f"🎯 Enemies: {drone1.name} at {drone1.hex}, {drone2.name} at {drone2.hex}")
+    print(
+        f"🎯 Enemies: {drone1.name} at {drone1.hex}, {drone2.name} at {drone2.hex}")
     print()
 
     while True:
@@ -133,7 +135,8 @@ def handle_movement_phase(engine):
     while True:
         print(f"\n🚀 Movement Options:")
         print(f"  Current: {ship.hex}, Facing: {ship.facing}")
-        print(f"  Movement points used: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
+        print(
+            f"  Movement points used: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
         print()
         print("Commands:")
         print("  move - Move forward one hex")
@@ -151,7 +154,8 @@ def handle_movement_phase(engine):
             elif cmd == "status":
                 print(f"📍 Position: {ship.hex}, Facing: {ship.facing}")
                 print(f"❤️  HP: {ship.hp}")
-                print(f"🎯 Movement: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
+                print(
+                    f"🎯 Movement: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
                 continue
             elif cmd == "end":
                 print("✅ Ending movement phase")
@@ -192,7 +196,8 @@ def handle_combat_phase(engine, alive_enemies):
         print("🎯 Available targets:")
         for i, enemy in enumerate(alive_enemies, 1):
             distance = engine.map.distance(ship.hex, enemy.hex)
-            print(f"  {i}. {enemy.name} at {enemy.hex} (distance: {distance}, HP: {enemy.hp})")
+            print(
+                f"  {i}. {enemy.name} at {enemy.hex} (distance: {distance}, HP: {enemy.hp})")
 
         print()
         print("Commands:")
@@ -225,7 +230,8 @@ def handle_combat_phase(engine, alive_enemies):
                             print(f"💥 {target.name} destroyed!")
                             alive_enemies.remove(target)
                         else:
-                            print(f"💥 {target.name} has {target.hp} HP remaining")
+                            print(
+                                f"💥 {target.name} has {target.hp} HP remaining")
                     else:
                         print("❌ Invalid target number")
                 except (IndexError, ValueError):
@@ -249,13 +255,99 @@ def run_ai_scenario():
     print("This will feature AI-controlled ship tactics")
 
 
-def run_multiplayer_scenario():
+def run_gui_simulation():
     """
-    Run scenario in multiplayer mode.
-    Multiple human players each controlling a side.
+    Simulate GUI mode - demonstrates how GUI integration would work.
+    Shows event-driven updates and state queries.
     """
-    print("MULTIPLAYER mode - Not yet implemented")
-    print("This will support multiple human players")
+    print("🎨 GUI SIMULATION mode - Event-driven gameplay")
+    print("=" * 50)
+
+    # Setup game state
+    game_map = HexMap()
+    ship = Ship("USS Enterprise", (0, 0), "A")
+    drone1 = Drone("Klingon Drone 1", (3, 0))
+    drone2 = Drone("Klingon Drone 2", (5, -1))
+
+    game_map.add_entity(ship)
+    game_map.add_entity(drone1)
+    game_map.add_entity(drone2)
+
+    engine = Engine(game_map, ship, [drone1, drone2])
+
+    # GUI Event Listener (simulates GUI updates)
+    def gui_event_handler(event_type, data=None):
+        if event_type == 'ship_moved':
+            print(
+                f"🎨 GUI UPDATE: Ship moved from {data['from']} to {data['to']}")
+        elif event_type == 'ship_turned':
+            print(
+                f"🎨 GUI UPDATE: Ship turned {data['direction']} from {data['from']} to {data['to']}")
+        elif event_type == 'combat_result':
+            print(
+                f"🎨 GUI UPDATE: Combat - {data['target']} took {data['damage_dealt']} damage")
+            if data['target_destroyed']:
+                print(f"🎨 GUI UPDATE: {data['target']} destroyed!")
+        elif event_type == 'phase_changed':
+            print(f"🎨 GUI UPDATE: Phase changed to {data['new_phase']}")
+        elif event_type == 'impulse_changed':
+            print(
+                f"🎨 GUI UPDATE: New impulse - Turn {data['new_turn']}, Impulse {data['new_impulse']}")
+
+    engine.add_event_listener(gui_event_handler)
+
+    print("🚀 Starting GUI simulation...")
+    print("🎮 This demonstrates how a GUI would interact with the game engine")
+    print()
+
+    # Simulate GUI-driven gameplay (simplified demonstration)
+    print(f"\n--- Turn {engine.turn} ---")
+
+    # Demonstrate GUI integration concepts
+    print("🔄 Impulse 1")
+
+    # Movement Phase
+    print("🚀 Movement Phase:")
+    state = engine.get_game_state_data()
+    print(
+        f"   Position: {state['player_ship']['position']}, Facing: {state['player_ship']['facing']}")
+
+    actions = engine.get_available_actions()
+    print(f"   Available actions: {[a['label'] for a in actions]}")
+
+    print("   → Clicking 'Move Forward' button")
+    engine.execute_player_move()
+
+    print("   → Clicking 'End Movement Phase'")
+    engine.advance_phase()
+
+    # Skip seeking weapons
+    engine.advance_phase()
+
+    # Combat Phase
+    print("\n⚔️ Combat Phase:")
+    actions = engine.get_available_actions()
+    print(
+        f"   Available targets: {[a['label'] for a in actions if a['type'] == 'fire']}")
+
+    if actions and any(a['type'] == 'fire' for a in actions):
+        print("   → Clicking 'Fire at Klingon Drone 1'")
+        engine.execute_player_fire(0)
+
+    print("   → Clicking 'End Combat Phase'")
+    engine.advance_phase()
+
+    # Damage Phase
+    print("\n💥 Damage Phase:")
+    print("   → Clicking 'Continue'")
+    engine.advance_phase()
+
+    print("\n🎮 GUI simulation complete!")
+    print("💡 This demonstrates how a GUI would:")
+    print("   • Query game state for display")
+    print("   • Get available actions for buttons/menus")
+    print("   • Execute actions via method calls")
+    print("   • Receive events for UI updates")
 
 
 def main():
@@ -264,21 +356,24 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Available Modes:
-  static      - Automated execution (current default behavior)
-  user-input  - Interactive user input for tactical decisions
-  ai          - AI-controlled ship tactics
-  multiplayer - Multiple human players
+  static          - Automated execution (current default behavior)
+  user-input      - Interactive user input for tactical decisions
+  ai              - AI-controlled ship tactics
+  multiplayer     - Multiple human players
+  gui-simulation  - Simulate GUI integration (demonstrates event-driven gameplay)
 
 Examples:
-  python app.py                    # Run static scenario
-  python app.py -m static -t 10    # Run static for 10 turns
-  python app.py -m user-input      # Interactive mode (future)
+  python app.py                        # Run static scenario
+  python app.py -m static -t 10        # Run static for 10 turns
+  python app.py -m user-input          # Interactive mode
+  python app.py -m gui-simulation      # GUI integration demo
         """
     )
 
     parser.add_argument(
         "-m", "--mode",
-        choices=["static", "user-input", "ai", "multiplayer"],
+        choices=["static", "user-input", "ai",
+                 "multiplayer", "gui-simulation"],
         default="static",
         help="Execution mode (default: static)"
     )
@@ -307,6 +402,8 @@ Examples:
         run_ai_scenario()
     elif args.mode == "multiplayer":
         run_multiplayer_scenario()
+    elif args.mode == "gui-simulation":
+        run_gui_simulation()
 
 
 if __name__ == "__main__":
