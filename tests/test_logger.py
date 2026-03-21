@@ -15,13 +15,13 @@ def test_logger_creation():
     game_map = HexMap()
     ship = Ship("Player", (0, 0), "A")
     drone = Drone("Enemy", (3, 0))
-    
+
     game_map.add_entity(ship)
     game_map.add_entity(drone)
-    
+
     engine = Engine(game_map, ship, [drone])
     logger = GameLogger(engine)
-    
+
     assert logger is not None
     assert logger.engine == engine
     assert len(logger.impulse_logs) > 0
@@ -32,20 +32,20 @@ def test_logger_event_capture():
     game_map = HexMap()
     ship = Ship("Player", (0, 0), "A")
     drone = Drone("Enemy", (3, 0))
-    
+
     game_map.add_entity(ship)
     game_map.add_entity(drone)
-    
+
     engine = Engine(game_map, ship, [drone])
     logger = GameLogger(engine)
-    
+
     # Simulate an event
     engine.notify_listeners('ship_moved', {
         'from': (0, 0),
         'to': (1, 0),
         'actor': 'Player'
     })
-    
+
     # Check that event was captured
     assert len(logger.all_events) > 0
     event = logger.all_events[0]
@@ -58,16 +58,16 @@ def test_map_snapshot():
     game_map = HexMap()
     ship = Ship("Player", (0, 0), "A")
     drone = Drone("Enemy", (3, 0))
-    
+
     game_map.add_entity(ship)
     game_map.add_entity(drone)
-    
+
     engine = Engine(game_map, ship, [drone])
     logger = GameLogger(engine)
-    
+
     # Take snapshot
     snapshot = logger.take_snapshot()
-    
+
     assert snapshot is not None
     assert snapshot.turn == 1
     assert snapshot.impulse == 1
@@ -79,20 +79,20 @@ def test_impulse_log():
     game_map = HexMap()
     ship = Ship("Player", (0, 0), "A")
     drone = Drone("Enemy", (3, 0))
-    
+
     game_map.add_entity(ship)
     game_map.add_entity(drone)
-    
+
     engine = Engine(game_map, ship, [drone])
     logger = GameLogger(engine)
-    
+
     # Add some events
     engine.notify_listeners('ship_moved', {
         'from': (0, 0),
         'to': (1, 0),
         'actor': 'Player'
     })
-    
+
     # Format log
     log_text = logger.format_impulse_log()
     assert "Turn" in log_text or "Impulse" in log_text
@@ -104,16 +104,16 @@ def test_map_visualizer():
     game_map = HexMap()
     ship = Ship("Player", (0, 0), "A")
     drone = Drone("Enemy", (3, 0))
-    
+
     game_map.add_entity(ship)
     game_map.add_entity(drone)
-    
+
     engine = Engine(game_map, ship, [drone])
     logger = GameLogger(engine)
-    
+
     snapshot = logger.take_snapshot()
     visual = MapVisualizer.format_snapshot(snapshot)
-    
+
     assert visual is not None
     assert len(visual) > 0
     assert "Player" in visual or "P" in visual

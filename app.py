@@ -45,7 +45,7 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
         game_map.add_entity(enemy)
 
     engine = Engine(game_map, scenario.player_ship, scenario.enemy_ships)
-    
+
     # Initialize logger to capture events and snapshots
     logger = GameLogger(engine)
 
@@ -67,7 +67,7 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
                 print(f"\n{result['message']}")
                 victory = result["victory"]
                 break
-            
+
             # Start log for next impulse
             logger.start_impulse()
 
@@ -86,15 +86,68 @@ def run_scenario(scenario_path: str, max_turns: int = 20):
     print(logger.format_full_log())
     print(MapVisualizer.format_all_snapshots(logger.snapshots))
 
-    # Timeout
-    if not victory:
-        result = VictoryChecker.check_victory(engine, scenario.victory_conditions)
-        if result["defeat"]:
-            print(f"\n{result['message']}")
-        else:
-            print(f"\n⏰ Scenario timed out after {max_turns} turns")
-    
-    return victory
+    # Build API-friendly data structure
+    return {
+        'scenario': scenario.name,
+        'victory': victory,
+        'result_message': result['message'],
+        'full_log': logger.format_full_log(),
+        'events': [evt.to_dict() for evt in logger.all_events],
+        'snapshots': [s.to_dict() for s in logger.snapshots],
+        'turns': engine.turn,
+        'impulse': engine.impulse,
+    }
+
+
+def run_scenario_data(scenario_path: str, max_turns: int = 20):
+    """Run scenario and return structured data for web UI."""
+    scenario = load_scenario(scenario_path)
+    game_map = HexMap()
+    game_map.add_entity(scenario.player_ship)
+    for enemy in scenario.enemy_ships:
+        game_map.add_entity(enemy)
+
+    engine = Engine(game_map, scenario.player_ship, scenario.enemy_ships)
+    logger = GameLogger(engine)
+
+    victory = False
+    result = {'victory': False, 'defeat': False, 'message': ''}
+
+    for turn in range(max_turns):
+        for impulse in range(8):
+            engine.step()
+            logger.end_impulse()
+            result = VictoryChecker.check_victory(
+                engine, scenario.victory_conditions)
+            if result['victory'] or result['defeat']:
+                victory = result['victory']
+                break
+            logger.start_impulse()
+
+        if result['victory'] or result['defeat']:
+            break
+
+        result = VictoryChecker.check_victory(
+            engine, scenario.victory_conditions)
+        if result['victory'] or result['defeat']:
+            victory = result['victory']
+            break
+
+    if not victory and not result['defeat']:
+        result = VictoryChecker.check_victory(
+            engine, scenario.victory_conditions)
+
+    return {
+        'scenario': scenario.name,
+        'description': scenario.description,
+        'victory': victory,
+        'result_message': result['message'],
+        'events': [evt.to_dict() for evt in logger.all_events],
+        'snapshots': [s.to_dict() for s in logger.snapshots],
+        'full_log': logger.format_full_log(),
+        'turn': engine.turn,
+        'impulse': engine.impulse,
+    }
 
 
 def run_static_scenario(max_turns=20):
@@ -192,6 +245,9 @@ def execute_phase_interactive(engine, alive_enemies):
     """
     current_phase = engine.state.step
 
+    # Display map at phase start
+    display_phase_map(engine)
+
     print(f"\n🔄 Phase: {current_phase.name.replace('_', ' ').title()}")
 
     if current_phase.name == "MOVE_SHIPS":
@@ -210,6 +266,35 @@ def execute_phase_interactive(engine, alive_enemies):
         print(f"⚠️  Unknown phase: {current_phase}")
         engine.state.next_step()
         return True
+
+
+def display_phase_map(engine):
+    """Display the current state of the battle map."""
+    from sfb.game.logger import MapSnapshot
+
+    # Build entity list from game map
+    entities = []
+    for entity in engine.map.entities:
+        entities.append({
+            'name': entity.name,
+            'hex': entity.hex,
+            'facing': entity.facing,
+            'hp': entity.hp,
+            'alive': entity.alive,
+            'symbol': 'P' if entity == engine.ship else 'E'
+        })
+
+    # Create snapshot for visualization
+    snapshot = MapSnapshot(
+        turn=engine.turn,
+        impulse=engine.impulse,
+        phase=engine.current_phase.name,
+        entities=entities
+    )
+
+    # Display map
+    map_display = MapVisualizer.format_snapshot(snapshot)
+    print("\n" + map_display)
 
 
 def handle_movement_phase(engine):

@@ -1,13 +1,10 @@
 {
   "name": "SFB Python Dev",
-
   "build": {
     "dockerfile": "Dockerfile"
   },
-
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -19,13 +16,10 @@
       ]
     }
   },
-
   "remoteEnv": {
     "TZ": "America/New_York"
   },
-
   "postCreateCommand": "bash .devcontainer/setup.sh",
-
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
   "postStartCommand": "sudo chown -R vscode:vscode /workspace"

@@ -237,7 +237,7 @@ class Engine:
                 self.ship.move(self.map)
                 print(
                     f"{self.ship.name} moves to {self.ship.hex} facing {self.ship.facing}")
-                
+
                 # Broadcast movement event
                 self.notify_listeners('ship_moved', {
                     'actor': self.ship.name,
@@ -256,7 +256,7 @@ class Engine:
                     print(f"Firing at {target.name}...")
                     old_hp = target.hp
                     CombatSystem.fire_phaser(self.ship, target, self.map)
-                    
+
                     # Broadcast combat result event
                     self.notify_listeners('combat_result', {
                         'actor': self.ship.name,

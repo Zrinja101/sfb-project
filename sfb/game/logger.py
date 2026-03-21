@@ -142,7 +142,8 @@ class GameLogger:
             return ""
 
         output = []
-        output.append(f"Turn {impulse_log.turn}, Impulse {impulse_log.impulse}:")
+        output.append(
+            f"Turn {impulse_log.turn}, Impulse {impulse_log.impulse}:")
 
         if not impulse_log.events:
             output.append("  [No events]")

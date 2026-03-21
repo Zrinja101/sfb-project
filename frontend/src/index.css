@@ -1,0 +1,48 @@
+:root {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1d1d1d;
+    background: #f6f8fb;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
+.app {
+    margin: 0 auto;
+    max-width: 980px;
+    padding: 1rem;
+}
+
+header {
+    border-bottom: 2px solid #eee;
+    margin-bottom: 1rem;
+}
+
+main button {
+    padding: 0.7rem 1.2rem;
+    border: none;
+    background: #0055b8;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+main button:disabled {
+    background: #a4bcd8;
+    cursor: progress;
+}
+
+.error {
+    color: red;
+    margin-top: 0.8rem;
+}
+
+.result pre {
+    background: #202b3a;
+    color: #eeffee;
+    padding: 0.8rem;
+    border-radius: 6px;
+    overflow-x: auto;
+}

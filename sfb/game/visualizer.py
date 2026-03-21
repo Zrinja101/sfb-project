@@ -12,7 +12,8 @@ class MapVisualizer:
     def format_snapshot(snapshot: MapSnapshot) -> str:
         """Format a map snapshot as ASCII art."""
         output = []
-        output.append(f"Turn {snapshot.turn}, Impulse {snapshot.impulse} ({snapshot.phase})")
+        output.append(
+            f"Turn {snapshot.turn}, Impulse {snapshot.impulse} ({snapshot.phase})")
         output.append("-" * 50)
 
         if not snapshot.entities:

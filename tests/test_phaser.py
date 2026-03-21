@@ -57,7 +57,7 @@ def test_fire_phaser_different_facing():
 def test_fire_phaser_at_max_range():
     """Test firing at maximum effective range."""
     import random
-    
+
     game_map = HexMap()
     ship = Ship("USS Test", (0, 0), "A")
     target = Ship("Enemy", (6, 0), "A")  # Range 6 (max for phaser-1)

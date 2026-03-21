@@ -49,6 +49,36 @@ python -m pip install -r requirements.txt
 python -m pytest -q
 ```
 
+## Web-based GUI (React)
+
+A minimal React frontend is available under `frontend/` and a Flask backend in `webapp.py`.
+
+### Setup
+
+```bash
+# Backend dependencies
+pip install flask
+
+# Optional frontend dependencies
+cd frontend
+npm install
+```
+
+### Run backend
+
+```bash
+python webapp.py
+```
+
+### Run frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend talks to backend at `http://localhost:5000/api/run-scenario` and renders event/log output.
+
 ## Roadmap
 - [ ] Scenario #1 full implementation
 - [ ] YAML-driven scenarios
