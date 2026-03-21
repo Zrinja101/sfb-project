@@ -21,6 +21,30 @@ class Engine:
     def impulse(self):
         return self.state.impulse
 
+    def execute_current_phase(self):
+        """
+        Execute only the current phase (for interactive mode).
+        Returns a description of what happened.
+        """
+        phase = self.state.step
+        result = ""
+
+        if phase == GameStep.MOVE_SHIPS:
+            # Movement is handled interactively, not automatically
+            result = "Movement phase - awaiting player input"
+            
+        elif phase == GameStep.MOVE_SEEKING_WEAPONS:
+            result = "Seeking weapons phase - no action required"
+            
+        elif phase == GameStep.FIRE_WEAPONS:
+            # Combat is handled interactively, not automatically
+            result = "Combat phase - awaiting player input"
+            
+        elif phase == GameStep.DAMAGE:
+            result = "Damage resolution phase - automatic"
+            
+        return result
+
     def step(self):
         # Execute a complete impulse (all defined steps) in one call
         for _ in range(len(self.state.STEPS)):

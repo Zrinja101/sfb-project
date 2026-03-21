@@ -48,10 +48,196 @@ def run_static_scenario(max_turns=20):
 def run_user_input_scenario():
     """
     Run scenario with user input mode.
-    Interactive mode where user makes decisions.
+    Interactive mode where user makes tactical decisions at each phase.
     """
-    print("USER INPUT mode - Not yet implemented")
-    print("This will allow players to make tactical decisions interactively")
+    print("🎮 USER INPUT mode - Interactive Tactical Combat")
+    print("=" * 50)
+
+    # Setup game state
+    game_map = HexMap()
+    ship = Ship("USS Enterprise", (0, 0), "A")
+    drone1 = Drone("Klingon Drone 1", (3, 0))
+    drone2 = Drone("Klingon Drone 2", (5, -1))
+
+    game_map.add_entity(ship)
+    game_map.add_entity(drone1)
+    game_map.add_entity(drone2)
+
+    engine = Engine(game_map, ship, [drone1, drone2])
+
+    print(f"🚀 Starting Scenario #1")
+    print(f"📍 Your ship: {ship.name} at {ship.hex}, facing {ship.facing}")
+    print(f"🎯 Enemies: {drone1.name} at {drone1.hex}, {drone2.name} at {drone2.hex}")
+    print()
+
+    while True:
+        # Check victory/defeat conditions
+        alive_enemies = [t for t in [drone1, drone2] if t.alive]
+        if not alive_enemies:
+            print("🎉 VICTORY! All enemies destroyed!")
+            break
+        if not ship.alive:
+            print("💀 DEFEAT! Your ship has been destroyed!")
+            break
+
+        print(f"\n--- Turn {engine.turn}, Impulse {engine.impulse} ---")
+        print(f"📍 Position: {ship.hex}, Facing: {ship.facing}, HP: {ship.hp}")
+        print(f"🎯 Remaining enemies: {len(alive_enemies)}")
+
+        # Interactive phase execution
+        try:
+            if not execute_phase_interactive(engine, alive_enemies):
+                break  # User chose to quit
+        except KeyboardInterrupt:
+            print("\n👋 Game interrupted by user.")
+            break
+        except Exception as e:
+            print(f"❌ Error during phase execution: {e}")
+            continue
+
+        # Auto-advance to next impulse
+        engine._next_impulse()
+
+
+def execute_phase_interactive(engine, alive_enemies):
+    """
+    Execute one phase interactively, getting user input.
+    Returns False if user wants to quit.
+    """
+    current_phase = engine.state.step
+
+    print(f"\n🔄 Phase: {current_phase.name.replace('_', ' ').title()}")
+
+    if current_phase.name == "MOVE_SHIPS":
+        return handle_movement_phase(engine)
+    elif current_phase.name == "MOVE_SEEKING_WEAPONS":
+        print("🔍 Seeking weapons phase - no weapons to move")
+        engine.state.next_step()
+        return True
+    elif current_phase.name == "FIRE_WEAPONS":
+        return handle_combat_phase(engine, alive_enemies)
+    elif current_phase.name == "DAMAGE":
+        print("💥 Damage resolution phase - automatic")
+        engine.state.next_step()
+        return True
+    else:
+        print(f"⚠️  Unknown phase: {current_phase}")
+        engine.state.next_step()
+        return True
+
+
+def handle_movement_phase(engine):
+    """Handle user input for movement phase."""
+    ship = engine.ship
+
+    while True:
+        print(f"\n🚀 Movement Options:")
+        print(f"  Current: {ship.hex}, Facing: {ship.facing}")
+        print(f"  Movement points used: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
+        print()
+        print("Commands:")
+        print("  move - Move forward one hex")
+        print("  turn left - Turn left (if eligible)")
+        print("  turn right - Turn right (if eligible)")
+        print("  status - Show current status")
+        print("  end - End movement phase")
+        print("  quit - Quit game")
+
+        try:
+            cmd = input("\n🎯 Movement command: ").strip().lower()
+
+            if cmd == "quit":
+                return False
+            elif cmd == "status":
+                print(f"📍 Position: {ship.hex}, Facing: {ship.facing}")
+                print(f"❤️  HP: {ship.hp}")
+                print(f"🎯 Movement: {ship.hexes_moved_since_turn}/{ship.turn_mode}")
+                continue
+            elif cmd == "end":
+                print("✅ Ending movement phase")
+                break
+            elif cmd == "move":
+                if ship.can_turn():
+                    print("⚠️  Cannot move: must turn first (turn mode requirement)")
+                    continue
+                ship.move(engine.map)
+                print(f"🚀 Moved to {ship.hex}")
+            elif cmd == "turn left":
+                ship.turn_left()
+                print(f"↺ Turned left, now facing {ship.facing}")
+            elif cmd == "turn right":
+                ship.turn_right()
+                print(f"↻ Turned right, now facing {ship.facing}")
+            else:
+                print("❌ Unknown command. Type 'status' for help.")
+
+        except ValueError as e:
+            print(f"❌ {e}")
+        except EOFError:
+            return False
+
+    engine.state.next_step()
+    return True
+
+
+def handle_combat_phase(engine, alive_enemies):
+    """Handle user input for combat phase."""
+    ship = engine.ship
+
+    while True:
+        print(f"\n⚔️  Combat Phase")
+        print(f"📍 Your position: {ship.hex}, Facing: {ship.facing}")
+
+        # Show available targets
+        print("🎯 Available targets:")
+        for i, enemy in enumerate(alive_enemies, 1):
+            distance = engine.map.distance(ship.hex, enemy.hex)
+            print(f"  {i}. {enemy.name} at {enemy.hex} (distance: {distance}, HP: {enemy.hp})")
+
+        print()
+        print("Commands:")
+        print("  fire <number> - Fire phaser at target (e.g., 'fire 1')")
+        print("  status - Show current status")
+        print("  end - End combat phase")
+        print("  quit - Quit game")
+
+        try:
+            cmd = input("\n🎯 Combat command: ").strip().lower()
+
+            if cmd == "quit":
+                return False
+            elif cmd == "status":
+                print(f"📍 Position: {ship.hex}, Facing: {ship.facing}")
+                print(f"❤️  HP: {ship.hp}")
+                continue
+            elif cmd == "end":
+                print("✅ Ending combat phase")
+                break
+            elif cmd.startswith("fire "):
+                try:
+                    target_num = int(cmd.split()[1]) - 1
+                    if 0 <= target_num < len(alive_enemies):
+                        target = alive_enemies[target_num]
+                        print(f"⚡ Firing at {target.name}...")
+                        CombatSystem.fire_phaser(ship, target, engine.map)
+
+                        if not target.alive:
+                            print(f"💥 {target.name} destroyed!")
+                            alive_enemies.remove(target)
+                        else:
+                            print(f"💥 {target.name} has {target.hp} HP remaining")
+                    else:
+                        print("❌ Invalid target number")
+                except (IndexError, ValueError):
+                    print("❌ Invalid fire command. Use 'fire <number>'")
+            else:
+                print("❌ Unknown command. Type 'status' for help.")
+
+        except EOFError:
+            return False
+
+    engine.state.next_step()
+    return True
 
 
 def run_ai_scenario():
